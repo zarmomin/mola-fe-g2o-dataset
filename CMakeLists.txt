@@ -25,11 +25,12 @@ mola_set_target_build_options(${PROJECT_NAME})
 mola_configure_library(${PROJECT_NAME})
 
 # find dependencies:
-find_package(mrpt-graphslam)
+find_package(MRPT 1.9.9 REQUIRED COMPONENTS graphs)
+
 
 # Private lib Dependencies:
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
   mola-kernel
-    mrpt-slam
+    mrpt::graphs
 )
