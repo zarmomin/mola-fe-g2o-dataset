@@ -36,7 +36,7 @@ class G2ODataset : public FrontEndBase
     void onNewObservation(CObservation::Ptr&) override
     {
         THROW_EXCEPTION(
-            "Not an actual front-end! Cannot accept real sensor observations.")
+            "Not an actual front-end! Cannot accept real sensor observations.");
     }
 
    private:
