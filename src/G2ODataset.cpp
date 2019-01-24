@@ -38,7 +38,7 @@ void G2ODataset::initialize(const std::string& cfg_block)
 
     YAML_LOAD_MEMBER_REQ(g2o_file, std::string);
 
-    MRPT_LOG_INFO_STREAM("Loading dataset file: " << g2o_file_);
+    MRPT_LOG_INFO_STREAM("Lg2o_dataset_feoading dataset file: " << g2o_file_);
 
     graph_t dataset;
     dataset.loadFromTextFile(g2o_file_);
@@ -139,13 +139,25 @@ void G2ODataset::create_edge(
 
     MRPT_TODO("Take into account the covariance");
 
-    mola::FactorRelativePose3 fPose3(from, to, edge.getMeanVal().asTPose());
-
     MRPT_LOG_DEBUG_STREAM(
         "create_edge: from #" << from << " ==> to #" << to
                               << " relPose=" << edge.getMeanVal().asString());
 
-    mola::Factor f = std::move(fPose3);
+    mola::Factor f;
+    if (std::abs(static_cast<int64_t>(to) - static_cast<int64_t>(from)) == 1)
+    {
+        // Assume consecutive IDs are consecutive in time, and define them with
+        // a constant velocity model, if applicable:
+        mola::FactorRelativePose3ConstVel fPose3(
+            from, to, edge.getMeanVal().asTPose());
+        f = std::move(fPose3);
+    }
+    else
+    {
+        // SE(3) transformation:
+        mola::FactorRelativePose3 fPose3(from, to, edge.getMeanVal().asTPose());
+        f = std::move(fPose3);
+    }
     factor_out_fut = slam_backend_->addFactor(f);
 
     // Wait until it's executed:
