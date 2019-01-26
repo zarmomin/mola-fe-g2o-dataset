@@ -69,7 +69,8 @@ void G2ODataset::spinOnce()
     if (next_to_publish_ == dataset_sorted_.end())
     {
         MRPT_LOG_THROTTLE_WARN(
-            10.0, "End of dataset reached! Nothing else to publish.");
+            10.0,
+            "End of dataset reached! Nothing else to publish (CTRL+C to quit)");
         return;
     }
 
