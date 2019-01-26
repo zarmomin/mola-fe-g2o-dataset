@@ -145,20 +145,9 @@ void G2ODataset::create_edge(
                               << " relPose=" << edge.getMeanVal().asString());
 
     mola::Factor f;
-    if (std::abs(static_cast<int64_t>(to) - static_cast<int64_t>(from)) == 1)
-    {
-        // Assume consecutive IDs are consecutive in time, and define them with
-        // a constant velocity model, if applicable:
-        mola::FactorRelativePose3ConstVel fPose3(
-            from, to, edge.getMeanVal().asTPose());
-        f = std::move(fPose3);
-    }
-    else
-    {
-        // SE(3) transformation:
-        mola::FactorRelativePose3 fPose3(from, to, edge.getMeanVal().asTPose());
-        f = std::move(fPose3);
-    }
+    // SE(3) transformation:
+    mola::FactorRelativePose3 fPose3(from, to, edge.getMeanVal().asTPose());
+    f              = std::move(fPose3);
     factor_out_fut = slam_backend_->addFactor(f);
 
     // Wait until it's executed:
