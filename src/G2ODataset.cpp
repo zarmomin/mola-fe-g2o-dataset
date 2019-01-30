@@ -75,8 +75,12 @@ void G2ODataset::spinOnce()
     }
 
     // Take next edges:
-    const auto edges = next_to_publish_->second;
+    const auto edges  = next_to_publish_->second;
+    const auto cur_kf = next_to_publish_->first;
     ++next_to_publish_;
+
+    MRPT_LOG_DEBUG_STREAM(
+        "Current KF: " << cur_kf << " with " << edges.size() << " edges.");
 
     for (const auto& edge : edges)
     {
@@ -96,6 +100,16 @@ void G2ODataset::spinOnce()
         create_edge(id_from, id_to, e);
     }
 
+    // Advertise new localization:
+    {
+        BackEndBase::AdvertiseUpdatedLocalization_Input new_loc;
+        new_loc.timestamp    = mrpt::Clock::now();
+        new_loc.reference_kf = g2o_to_mola_IDs_.at(cur_kf);
+        new_loc.pose         = mrpt::math::TPose3D::Identity();
+
+        slam_backend_->advertiseUpdatedLocalization(new_loc);
+    }
+
     MRPT_TRY_END
 }
 
@@ -103,11 +117,8 @@ mola::id_t G2ODataset::create_KF_if_new(const mrpt::graphs::TNodeID id)
 {
     MRPT_START
 
-    {
-        auto it_id = g2o_to_mola_IDs_.find(id);
-        if (it_id != g2o_to_mola_IDs_.end())
-            return it_id->second;  // Already done!
-    }
+    if (auto it_id = g2o_to_mola_IDs_.find(id); it_id != g2o_to_mola_IDs_.end())
+        return it_id->second;  // Already done!
 
     // 1) New KeyFrame
     BackEndBase::ProposeKF_Input kf;
