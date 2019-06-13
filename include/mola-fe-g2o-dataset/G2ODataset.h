@@ -11,7 +11,7 @@
  */
 #pragma once
 
-#include <mola-kernel/FrontEndBase.h>
+#include <mola-kernel/interfaces/FrontEndBase.h>
 #include <mrpt/graphs/CNetworkOfPoses.h>
 #include <list>
 
