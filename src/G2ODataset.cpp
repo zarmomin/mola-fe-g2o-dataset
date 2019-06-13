@@ -23,7 +23,7 @@
 
 using namespace mola;
 
-MRPT_INITIALIZER(do_register){MOLA_REGISTER_MODULE(G2ODataset)}
+MRPT_INITIALIZER(do_register_G2ODataset){MOLA_REGISTER_MODULE(G2ODataset)}
 
 G2ODataset::G2ODataset() = default;
 
