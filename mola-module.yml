@@ -1,0 +1,2 @@
+build-dep: mola-common
+build-dep: mola-kernel

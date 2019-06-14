@@ -15,6 +15,7 @@ project(mola-fe-g2o-dataset LANGUAGES CXX)
 
 # MOLA CMake scripts: "mola_xxx()"
 find_package(mola-common REQUIRED)
+find_mola_package(mola-kernel)
 
 # find dependencies:
 find_package(MRPT 1.9.9 REQUIRED COMPONENTS graphs)
