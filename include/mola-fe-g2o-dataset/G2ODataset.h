@@ -25,6 +25,8 @@ namespace mola
  * \ingroup mola_fe_g2o_dataset_grp */
 class G2ODataset : public FrontEndBase
 {
+    DEFINE_MRPT_OBJECT(G2ODataset)
+
    public:
     G2ODataset();
     virtual ~G2ODataset() override = default;
