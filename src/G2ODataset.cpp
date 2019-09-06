@@ -39,7 +39,7 @@ void G2ODataset::initialize(const std::string& cfg_block)
     auto cfg = c["params"];
     MRPT_LOG_DEBUG_STREAM("Loading these params:\n" << cfg);
 
-    YAML_LOAD_MEMBER_REQ(g2o_file, std::string);
+    yamlLoadMemberReq<std::string>(cfg, "g2o_file", g2o_file);
 
     MRPT_LOG_INFO_STREAM("Lg2o_dataset_feoading dataset file: " << g2o_file_);
 
